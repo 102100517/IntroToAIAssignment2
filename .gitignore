@@ -1,3 +1,5 @@
 .[oa]
-*.vcxproj
+.vcxproj
 /Debug
+.vs
+.db
