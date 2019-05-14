@@ -3,11 +3,16 @@
 
 */
 #include <iostream>
+#include <fstream>
 #include "BackwardsChaining.h"
 using namespace std;
 
 int main(int argc, char* argv[])
 {
+	fstream myFile;
+
+
+
 	if (argc < 3)
 	{
 		if (argv[0] == "FC")
@@ -24,7 +29,7 @@ int main(int argc, char* argv[])
 		{
 			cout << "Invalid method name";
 		}
-	}
+	}	
 	else
 	{
 		cout << "Too many parameters passed to program";
