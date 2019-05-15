@@ -140,9 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BackwardsChaining.h" />
+    <ClInclude Include="InferenceEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BackwardsChaining.cpp" />
+    <ClCompile Include="InferenceEngine.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
