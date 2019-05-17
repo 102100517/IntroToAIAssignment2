@@ -3,6 +3,11 @@
 #include <fstream>
 using namespace std;
 
+enum booleanOperation
+{
+	AND, OR, XAND, XOR, NOT
+};
+
 struct consequent
 {
 	string name;
@@ -14,14 +19,23 @@ struct antecedent : consequent
 	consequent* rConsequent;
 };
 
+struct expression : antecedent
+{
+	expression* antecendent;
+	booleanOperation operation;
+};
+
 
 class InferenceEngine
 {
 private:
-	fstream* textFile;
+	ifstream* textFile;
 	void readInFile();
+	//string readExpression();
+	list <string> goals;
+	list <string> facts;
 public:
 	
-	InferenceEngine(fstream &myFile);
+	InferenceEngine(ifstream &myFile);
 	~InferenceEngine();
 };

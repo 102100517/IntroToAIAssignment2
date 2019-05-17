@@ -6,8 +6,17 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	fstream myFile;
-	myFile.open(argv[1]);
+	ifstream myFile;
+	myFile.open("D:/Software_Dev/Swinburne/Intro_To_Ai/Assignment_2/IntroToAIAssignment2/test_genericKB.txt", ios::in);
+
+	if (myFile.is_open())
+	{
+		BackwardsChaining* BC = new BackwardsChaining(myFile);
+	}
+	
+	myFile.close();
+	
+	/*
 
 	if (argc < 3)                      // Check for correct no. of params
 	{
@@ -33,6 +42,6 @@ int main(int argc, char* argv[])
 
 		}
 	}
-		
+		*/
 	return 0;
 }
