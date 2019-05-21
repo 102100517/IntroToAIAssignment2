@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	ifstream myFile;
-	myFile.open("D:/Software_Dev/Swinburne/Intro_To_Ai/Assignment_2/IntroToAIAssignment2/test_genericKB.txt", ios::in);
+	myFile.open("../test_genericKB.txt", ios::in);
 
 	if (myFile.is_open())
 	{
