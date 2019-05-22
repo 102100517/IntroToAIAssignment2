@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	ifstream myFile;
-	myFile.open("../test_genericKB.txt", ios::in);
+	myFile.open("test_genericKB.txt", ios::in);
 
 	if (myFile.is_open())
 	{
@@ -16,32 +16,42 @@ int main(int argc, char* argv[])
 	
 	myFile.close();
 	
+	//       ERROR CHECKING
 	/*
-
 	if (argc < 3)                      // Check for correct no. of params
 	{
-		cout << "Too many parameters passed to program";
+		cout << "Too many parameters passed to program" << endl;
+		return 0;
 	}
-	else if (myFile.fail())            // Check filename is valid
+
+	if (myFile.fail())            // Check filename is valid
 	{
-		cout << "Unable to open file";
+		cout << "Unable to open file" << endl;
+		return 0;
 	}
-	else if ((argv[0] != "FC") || (argv[0] != "BC") || (argv[0] != "TT"))         // Check method name is valid
+
+	if ((argv[0] != "FC") || (argv[0] != "BC") || (argv[0] != "TT"))         // Check method name is valid
+	{
+		cout << "Invalid method name" << endl;
+		return 0;
+	}
+	
+	//    IF NO ERRORS OCCUR:
+
+	if (argv[0] == "FC")           // Execute selected method
 	{
 
-		if (argv[0] == "FC")           // Execute selected method
-		{
-
-		}
-		else if (argv[0] == "BC")
-		{
-
-		}
-		else if (argv[0] == "TT")
-		{
-
-		}
 	}
-		*/
+	else if (argv[0] == "BC")
+	{
+
+	}
+	else if (argv[0] == "TT")
+	{
+	
+	}
+	
+	*/
+		
 	return 0;
 }
