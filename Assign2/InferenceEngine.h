@@ -1,5 +1,5 @@
 #pragma once
-
+#include <regex>
 #include <string>
 #include <list>
 #include <fstream>
@@ -33,12 +33,14 @@ private:
 	ifstream* textFile;
 	void readInFile();
 	
-	list <string> expressions;    // Contains expressions to evaluate e.g: (A v B) => C
-	list <string> knownFacts;   // Contains a list of arguments known to be true
 protected:
-	string getAntecedant(string arg);
-	string getContainingArgument(string arg);
+	list <string> expressions;   // Contains expressions to evaluate e.g: (A v B) => C
+	list <string> knownFacts;   // Contains a list of arguments known to be true
+	list <string> goals;       // Holds aguments to find the truth value of
+	list <string> findInExpression(string arg);
+	void displayResults();
 public:
 	InferenceEngine(ifstream &myFile);
 	~InferenceEngine();
+	virtual void execute();
 };

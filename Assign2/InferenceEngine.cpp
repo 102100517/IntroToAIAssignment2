@@ -1,4 +1,3 @@
-
 #pragma once
 #include "InferenceEngine.h"
 
@@ -6,15 +5,27 @@ InferenceEngine::InferenceEngine(ifstream &aFile)
 {
 	textFile = &aFile;
 	readInFile();
-	
-	cout << getAntecedant("a") << endl;
-	cout << getAntecedant("b") << endl;
-	cout << getAntecedant("returnFalse") << endl;
+
 }
 
 InferenceEngine::~InferenceEngine()
 {
 
+}
+
+void InferenceEngine::execute()
+{
+	list <string> YEET;
+
+	for (auto iter = goals.begin(); iter != goals.end(); iter++)
+	{
+		YEET = findInExpression(*iter); // Retrieve all the args relevant to this
+
+		for (auto yeeter = YEET.begin(); yeeter != YEET.end(); yeeter++)
+		{
+
+		}
+	}
 }
 
 /* 
@@ -53,42 +64,19 @@ void InferenceEngine::readInFile()
 	destination->push_back(expression);     // If no colon at the end of the final expression it may be missed
 }
 
-// Find an argument in an expression, then grab the antecedent to its LEFT
-string InferenceEngine::getAntecedant(string arg)
-{
-	string argument = getContainingArgument(arg); // Do any of our goals contain the argument?
-	
-	if (argument == "")    // NO, exit & try another argument
-	{
-		return "";
-	}
-
-	string::size_type position = argument.find_first_of(arg);  // Find the position of the argument in the string
-	position--;          // Previous character should be an operand
-	string result = arg; // Our result is the argument we're looking for + an operator and its antecedant
-
-	if (argument[position] == '~')
-	{
-		result.insert(result.begin(), argument[position]);
-		position--;      // if our arg is negated the operator is behind the negation
-	}
-	position = -34;
-
-	result[position];
-	return result;	
-}
-
 // Return the expression containing the argument we want to evaluate
-string InferenceEngine::getContainingArgument(string arg)
+list <string> InferenceEngine::findInExpression(string arg)
 {
+	list <string> result;
+
 	for (auto iter = expressions.begin(); iter != expressions.end(); iter++)
 	{
 		if ((*iter).find(arg) != string::npos) // .find() returns position of substring, npos means end of the string
 		{
-			return *iter; // Its inside the goal!
+			result.push_back(*iter); // Its inside the goal!
 		}
 	}
-	return ""; // We found nothing
+	return result; // We found nothing
 }
 
 
