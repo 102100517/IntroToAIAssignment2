@@ -2,43 +2,42 @@
 #include <regex>
 #include <string>
 #include <list>
+#include <stack>
 #include <fstream>
 #include <iostream>
 
+#include "Expression.h"
+
 using namespace std;
 
-enum booleanOperation
-{
-	AND, OR, XAND, XOR, NOT
-};
 
-struct expression
-{
-	string name;
-	bool truthValue = false;
-	expression* antecedent;
-	expression* consequent;
-};
-/*
-struct expression : antecedent
-{
-	expression* antecendent;
-	booleanOperation operation;
-};
-*/
+
 
 class InferenceEngine
 {
 private:
 	ifstream* textFile;
 	void readInFile();
-	
+	expression* generateExpression(string expression); // returns root node of expression
+	argument* newArg(string value);
+	void printTree(expression* exp);
 protected:
-	list <string> expressions;   // Contains expressions to evaluate e.g: (A v B) => C
-	list <string> knownFacts;   // Contains a list of arguments known to be true
-	list <string> goals;       // Holds aguments to find the truth value of
-	list <string> findInExpression(string arg);
-	void displayResults();
+	const string orOperator = "||";
+	const string andOperator = "&";
+	const string impliesOperator = "=>";
+	const string biconditionalOperator = "<=>";
+	regex rgxOperatorChars = regex("^[<>=&~|]+$"); 
+	regex rgxVariableChars = regex("^~?([A-Za-z0-9])+$");
+	expression nullExpression;
+
+	list <expression*> allExpressions;   // Expressions stored as pre-processed strings
+	list <argument*> allArgs;      // Contains a list of arguments known to be true
+	list <argument*> goals;        // Holds aguments to find the truth value of
+
+	
+	bool isOperator(argument* arg);
+
+
 public:
 	InferenceEngine(ifstream &myFile);
 	~InferenceEngine();

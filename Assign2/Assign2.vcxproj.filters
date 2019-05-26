@@ -21,6 +21,9 @@
     <ClInclude Include="InferenceEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Expression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BackwardsChaining.cpp">

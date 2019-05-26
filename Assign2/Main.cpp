@@ -7,11 +7,13 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	ifstream myFile;
-	myFile.open("test_genericKB.txt", ios::in);
+	myFile.open("test_HornKB.txt", ios::in);
+
+	BackwardsChaining* BC;
 
 	if (myFile.is_open())
 	{
-		BackwardsChaining* BC = new BackwardsChaining(myFile);
+		BC = new BackwardsChaining(myFile);
 	}
 	
 	myFile.close();

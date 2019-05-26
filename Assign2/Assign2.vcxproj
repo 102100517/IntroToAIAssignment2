@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BackwardsChaining.h" />
+    <ClInclude Include="Expression.h" />
     <ClInclude Include="InferenceEngine.h" />
   </ItemGroup>
   <ItemGroup>
