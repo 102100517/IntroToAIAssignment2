@@ -2,12 +2,11 @@
 #include "InferenceEngine.h"
 
 /***********************               CONSTRUCTOR               *********************************/
-InferenceEngine::InferenceEngine(ifstream &aFile)
+InferenceEngine::InferenceEngine(string path)
 {
 //	textFile = &aFile;
-//	readInFile();
-	expression* result = generateExpression("test<=>test2");
-	cout << result->arg->name;
+	readInFile(path);
+	
 }
 
 InferenceEngine::~InferenceEngine()
@@ -115,9 +114,7 @@ argument * InferenceEngine::newArg(string value)
 		}
 	}
 
-	argument* result = new argument;
-	result->name = value;
-	result->value = UKNOWN;
+	argument* result = new argument(value, UKNOWN);
 	allArgs.push_back(result); // Add the new argument to the list of existing ones
 	return result;
 }
@@ -125,67 +122,125 @@ argument * InferenceEngine::newArg(string value)
 /*
 	Read in the file & push each expression into a list depending on whether we are in ASK or TELL
 */
-void InferenceEngine::readInFile()
+void InferenceEngine::readInFile(string path)
 {
-	bool tell = false;
-	char character;
-	expression* newExpression;
-	argument* newGoal;
-	string sExpression; // temporarily holds string value being read in
+	ifstream myFile;
+	myFile.open(path, ios::in);
 
-	while (*textFile >> character)   // Extraction operator used over .eof() to prevent read access violations
+	if (myFile.is_open())
 	{
-		if (character == '\n' || character == ';')    // These signal the end of an expression
+		bool tell = false;
+		char character;
+		expression* newExpression;
+		argument* newArgument;
+		string sExpression; // temporarily holds string value being read in
+
+		while (myFile >> character)   // Extraction operator used over .eof() to prevent read access violations
 		{
-			if (tell)
+			if (character == '\n' || character == ';')    // These signal the end of an expression
 			{
-				newExpression = generateExpression(sExpression);
-				allExpressions.push_back(newExpression);
+				if (tell)
+				{
+					if (regex_match(sExpression, rgxVariableChars)) // If the expression is a standalone variable
+					{
+						truthValue val = TRUE;
+						if (sExpression[0] == '~')
+						{
+							sExpression.erase(0, 1); // Remove the 'NOT' from the name
+							val = FALSE;
+						}
+
+						newArgument = newArg(sExpression);
+						newArgument->value = val; 
+						sExpression = "";
+					}
+					else
+					{
+						newExpression = generateExpression(sExpression);
+						allExpressions.push_back(newExpression);
+						sExpression = "";
+					}
+				}
+				else
+				{
+					newArgument = newArg(sExpression);
+					goals.push_back(newArgument);
+					sExpression = "";
+				}
+			}
+			else if (!isspace(character))
+			{
+				sExpression += character;
+			}
+
+			if (sExpression == "TELL")
+			{
+				tell = true;
 				sExpression = "";
 			}
-			else
+			else if (sExpression == "ASK")
 			{
-				newGoal = newArg(sExpression);
-				goals.push_back(newGoal);
+				tell = false;
 				sExpression = "";
 			}
 		}
-		else if (!isspace(character))
+		// This block is copied from above to ensure final string is inserted
+		// into either list, as the EOF breaks the loop & what is in the remaining expression
+		// is ejected
+		if (tell && sExpression != "")
 		{
-			sExpression += character;
-		}
-
-		if (sExpression == "TELL")
-		{
-			tell = true;
+			newExpression = generateExpression(sExpression);
+			allExpressions.push_back(newExpression);
 			sExpression = "";
 		}
-		else if (sExpression == "ASK")
+		else if (sExpression != "")
 		{
-			tell = false;
+			newArgument = newArg(sExpression);
+			goals.push_back(newArgument);
 			sExpression = "";
 		}
 	}
-	// This block is copied from above to ensure final string is inserted
-	// into either list, as the EOF breaks the loop & what is in the remaining expression
-	// is ejected
-	if (tell && sExpression != "")
+	else
 	{
-		newExpression = generateExpression(sExpression);
-		allExpressions.push_back(newExpression);
-		sExpression = "";
+		cout << "Error opening file\n";
 	}
-	else if (sExpression != "")
-	{
-		newGoal = newArg(sExpression);
-		goals.push_back(newGoal);
-		sExpression = "";
-	}
-	cout << "";
 }
 
 /*************************************************************************************************/
 /**********************             PROTECTED METHODS             ********************************/
+
+expression * InferenceEngine::findInExpression(expression* source, argument* target)
+{
+	expression* result = NULL;
+	if (source != NULL)
+	{
+		if (source->left != NULL && result == NULL)
+		{
+			if (source->left->arg == target)
+			{
+				return source->left;
+			}
+			else
+			{
+				result = findInExpression(source->left, target);
+			}
+		}
+
+		if (source->right != NULL && result == NULL)
+		{
+			if (source->right->arg == target)
+			{
+				return source->right;
+			}
+			else
+			{
+				result = findInExpression(source->right, target);
+			}
+		}
+
+		return result;
+	}
+}
 
 bool InferenceEngine::isOperator(argument* arg)
 {

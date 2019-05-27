@@ -7,7 +7,7 @@ class BackwardsChaining : public InferenceEngine
 private:
 	bool solve(string arg);
 public:
-	BackwardsChaining(ifstream &myFile);       // Constructor
+	BackwardsChaining(string path);       // Constructor
 	~BackwardsChaining();
 	void execute();
 };

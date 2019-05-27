@@ -1,9 +1,23 @@
 
 #include "BackwardsChaining.h"
 
-BackwardsChaining::BackwardsChaining(ifstream &aFile): InferenceEngine(aFile)
+BackwardsChaining::BackwardsChaining(string path): InferenceEngine(path)
 {
-	
+	list <expression*> toSolve;
+	expression* antecedant;
+	for (auto i = goals.begin(); i != goals.end(); i++)
+	{
+		for (auto j = allExpressions.begin(); j != allExpressions.end(); j++)
+		{
+			antecedant = findInExpression(*j, *i);
+			
+			if (antecedant != NULL)
+			{
+				toSolve.push_back(antecedant);
+			}
+		}
+	}
+	cout << "";
 }
 
 BackwardsChaining::~BackwardsChaining()
@@ -25,22 +39,9 @@ void BackwardsChaining::execute()
 
 bool BackwardsChaining::solve(string arg)
 {
-	// FOR EACH EXPRESSION
-
-	/* CASE
-	 (arg & q)
-	 (arg || q) 
-		return false
-
-	(arg => q)
-		knownFacts.push_back(q)
-
-	(q => arg)
-		if (solve(q))
-			return true
 	
-	*/
 	return false;
 }
+
 
 

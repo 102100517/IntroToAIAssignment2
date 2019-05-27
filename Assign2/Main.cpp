@@ -6,17 +6,8 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	ifstream myFile;
-	myFile.open("test_HornKB.txt", ios::in);
 
-	BackwardsChaining* BC;
-
-	if (myFile.is_open())
-	{
-		BC = new BackwardsChaining(myFile);
-	}
-	
-	myFile.close();
+	BackwardsChaining* BC = new BackwardsChaining("test_HornKB.txt");
 	
 	//       ERROR CHECKING
 	/*

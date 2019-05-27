@@ -14,30 +14,39 @@ struct argument
 {
 	string name;
 	truthValue value;
+
+	argument(string pName, truthValue pValue)
+	{
+		name = pName;
+		value = pValue;
+	}
 };
 
 struct expression
 {
 	argument* arg; // Each argument exists independant of any one expression
-	expression* left, *right;
+	expression* left, *right, *parent;
 
 	expression()
 	{
 		arg = NULL;
 		left = NULL;
-		right = NULL;
+		right = NULL; 
+		parent = NULL;
 	}
 
-	bool setParent(expression* parent)
+	bool setParent(expression* parentNode)
 	{
-		if (parent->left == NULL)
+		if (parentNode->left == NULL)
 		{
-			parent->left = this;
+			parentNode->left = this;
+			parent = parentNode;
 			return true;
 		}
-		else if (parent->right == NULL)
+		else if (parentNode->right == NULL)
 		{
-			parent->right = this;
+			parentNode->right = this;
+			parent = parentNode;
 			return true;
 		}
 		
