@@ -31,6 +31,7 @@ expression* InferenceEngine::generateExpression(string sExpression)
 	{
 		if (regex_match(character, rgxVariableChars))
 		{
+			// Read in an argument until we reach an operator
 			while (regex_match(character, rgxVariableChars) && i < sExpression.length())
 			{
 				name += character;
@@ -40,6 +41,7 @@ expression* InferenceEngine::generateExpression(string sExpression)
 		}
 		else
 		{
+			// Read in an operator until we reach a variable
 			while (regex_match(character, rgxOperatorChars) && i < sExpression.length())
 			{
 				name += character;
@@ -48,23 +50,24 @@ expression* InferenceEngine::generateExpression(string sExpression)
 			}
 		}
 
-		arg = newArg(name);
+		arg = newArg(name); // Create a new argument to point to
 		name = "";
 		result = new expression();
-		result->arg = arg;
+		result->arg = arg;  
 		
 		if (tree.size() > 0) // prevent read access error
 		{
 			if (isOperator(tree.top()->arg))
 			{
+				// If the last one entered was an operator our current argument must be its child
 				result->setParent(tree.top());
 			}
 			else // Variables need to be made the children of an operator
 			{
-				result->left = tree.top();
+				result->left = tree.top(); // We know we can safely pop at least once due to first IF()
 				tree.pop();
 
-				if (tree.size() > 0)
+				if (tree.size() > 0) // Prevent read access error
 				{
 					result->right = tree.top();
 					tree.pop();
@@ -73,13 +76,13 @@ expression* InferenceEngine::generateExpression(string sExpression)
 				tree.push(result);
 			}
 		}
-		else
+		else // If the stack is empty, add our argument to it
 		{
 			tree.push(result);
 		}
 	}
 
-	result = tree.top();
+	result = tree.top(); // Only root node remaining
 	tree.pop();
 	printTree(result);
 	return result;
