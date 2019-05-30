@@ -2,49 +2,42 @@
 #include <iostream>
 #include <fstream>
 #include "BackwardsChaining.h"
+#include "ForwardsChaining.h"
 using namespace std;
 
 int main(int argc, char* argv[])
 {
 
-	BackwardsChaining* BC = new BackwardsChaining("test_hornKB.txt");
 	
-	//       ERROR CHECKING
-	/*
-	if (argc < 3)                      // Check for correct no. of params
+	
+	if (argc != 3)                      // Check for correct no. of params
 	{
-		cout << "Too many parameters passed to program" << endl;
+		cout << "Incorrect no. of parameters passed" << endl;
 		return 0;
 	}
 
-	if (myFile.fail())            // Check filename is valid
-	{
-		cout << "Unable to open file" << endl;
-		return 0;
-	}
+	cout << argv[1] << endl;
 
-	if ((argv[0] != "FC") || (argv[0] != "BC") || (argv[0] != "TT"))         // Check method name is valid
+	if (strcmp(argv[1], "FC"))           // Execute selected method
+	{
+		ForwardsChaining* FC = new ForwardsChaining(argv[2]);
+	}
+	else if (strcmp(argv[1], "BC"))
+	{
+
+		BackwardsChaining* BC = new BackwardsChaining(argv[2]);
+	}
+	else if (strcmp(argv[1], "TT"))
+	{
+		// NOT IMPLEMENTED
+	}
+	else
 	{
 		cout << "Invalid method name" << endl;
 		return 0;
 	}
 	
-	//    IF NO ERRORS OCCUR:
-
-	if (argv[0] == "FC")           // Execute selected method
-	{
-
-	}
-	else if (argv[0] == "BC")
-	{
-
-	}
-	else if (argv[0] == "TT")
-	{
 	
-	}
-	
-	*/
 		
 	return 0;
 }

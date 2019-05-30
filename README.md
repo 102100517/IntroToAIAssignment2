@@ -1,49 +1,33 @@
 # IntroToAIAssignment2
-The group assignment for the unit 30019: Introduction to Artificial Intelligence
+The is is the second group assignment for the unit CS30019: Introduction to Artificial Intelligence
 
-## TODO
+##Authors:
+Thomas Wright - 101470604
+James Hassal - 
 
-### Interferance engine
-- CLI operation
-	- File Selection
-	- Algorithm Selection
-- README FILE
-	- Features
-	- Bugs
-	- Missing
-	- Test Cases
-	- Resources
-	- Notes
-	- Summary
 
-#### Truth Tables Checking Algorithm
+## Features & Bugs
+### Data representation
+The expressions read in via the knowledge base are stored as a binary tree.
+In this manner the expresion (A & B) || C is represented as:
+	
+       ||
+     /    \
+    &      C
+  /   \
+ A     B
 
-#### Forward Chaining Algorithm
+Each argument in the expression has a pointer to each of its children & its parent.
+Using these the algorithm is able to determine antecedants/consequents relative to the
+expression it is currently evaluating. 
 
-#### Backwards Chaining Algorithm
+These objects have some getter/setter methods, however these are mostly for convienience so that 
+expression->argument->name can instead be written as expression->getName()
+Most of the underlying variables are still publicly accessible.
 
-## Research
 
-#### Forward Chaining Algorithm
+### Algorithms Implemented
 
-#### Backwards Chaining 
-
-Backwards chaining is an inference method where we work backwards from a goal. 
-
-How it works: 
-
-The engine starts with a list of consequents goals that it wants to meet. 
-It then searches the list of inference rules until it finds one that satisfies 
-one of its goals. 
-
-If the inference rule BOTH satifies the goal AND its antecedent is known to be true, then 
-the antecedent is added as a consequent. 
-
-## Glossary 
-
-Antecedent: first half of a logical statement. Follows directly after 'if'
-			e.g: if <strong> it can fly </strong> then it is a bird 
-
-Consequent: second half of a logical statement. Follows after 'then'. 
-			e.g: if this subject sucks then <strong> I am bored </strong>
-
+Currently this assignment has forwards chaining & backwards chaining implemented. 
+These both use the same underlying algorithm to infer the results, however they still operate as two 
+distinct algorithms as each searches a different side of the binary tree expressions.

@@ -28,6 +28,7 @@ protected:
 	list <argument*> goals;        // Holds aguments to find the truth value of
 
 	expression* findWhereConsequent(expression* source, argument* target);
+	expression* findWhereAntecedant(expression* source, argument* target);
 public:
 	InferenceEngine(string path);
 	~InferenceEngine();

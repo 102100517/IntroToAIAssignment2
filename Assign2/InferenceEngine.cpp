@@ -259,6 +259,47 @@ expression * InferenceEngine::findWhereConsequent(expression* source, argument* 
 	expression* result = NULL;
 	if (source != NULL)
 	{
+		// If the target is on the right, we need to see if theres a consequent further up
+		if (source->right != NULL && result == NULL)
+		{
+			if (source->right->getArg() == target)
+			{
+				// If the parent has no parent no consequent is possible
+				if (source->parent != NULL)
+				{
+					// Check that the source is not the antecedent of its parent
+					if (source != source->parent->right)
+					{
+						return source->right;
+					}
+				}
+			}
+
+			result = findWhereConsequent(source->right, target);
+		}
+
+		if (source->left != NULL && result == NULL)
+		{
+			// name is checked rather than wether they are the same object so that 
+			// if an argument is only given in negated form we can still evaluate its positive form
+			if (source->left->getArg()->name == target->name)
+			{
+				return source->left;
+			}
+			else
+			{
+				result = findWhereConsequent(source->left, target);
+			}
+		}
+	}
+	return result;
+}
+
+expression * InferenceEngine::findWhereAntecedant(expression * source, argument * target)
+{
+	expression* result = NULL;
+	if (source != NULL)
+	{
 		// If the target is on the left, we need to see if theres an antecedant further up
 		if (source->left != NULL && result == NULL)
 		{
@@ -282,7 +323,7 @@ expression * InferenceEngine::findWhereConsequent(expression* source, argument* 
 		{
 			// name is checked rather than wether they are the same object so that 
 			// if an argument is only given in negated form we can still evaluate its positive form
-			if (source->right->getArg()->name == target->name) 
+			if (source->right->getArg()->name == target->name)
 			{
 				return source->right;
 			}
