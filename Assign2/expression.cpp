@@ -8,7 +8,7 @@ expression::expression(argument* pArg)
 	left = NULL;
 	right = NULL;
 	parent = NULL;
-	negated = false;
+	negated = pArg->isNegated();
 }
 
 
@@ -39,19 +39,21 @@ string expression::getName()
 
 bool expression::setParent(expression* parentNode)
 {
-	if (parentNode->left == NULL)
+	if (parentNode != NULL)
 	{
-		parentNode->left = this;
-		parent = parentNode;
-		return true;
+		if (parentNode->left == NULL)
+		{
+			parentNode->left = this;
+			parent = parentNode;
+			return true;
+		}
+		else if (parentNode->right == NULL)
+		{
+			parentNode->right = this;
+			parent = parentNode;
+			return true;
+		}
 	}
-	else if (parentNode->right == NULL)
-	{
-		parentNode->right = this;
-		parent = parentNode;
-		return true;
-	}
-
 	return false;
 }
 
@@ -63,6 +65,31 @@ void expression::setAsNegated()
 bool expression::isOperator()
 {
 	return arg->isOperator();
+}
+
+bool expression::antecedantIsOperator()
+{
+	if (parent->left - isOperator() || parent->left == this)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool expression::consequentIsOperator()
+{
+	if (parent->right - isOperator() || parent->right == this)
+	{
+		return true;
+	}
+	return false;
+}
+
+
+argument* expression::getArg()
+{
+	return arg;
 }
 
 

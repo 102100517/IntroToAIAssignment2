@@ -4,7 +4,6 @@
 /***********************               CONSTRUCTOR               *********************************/
 InferenceEngine::InferenceEngine(string path)
 {
-//	textFile = &aFile;
 	readInFile(path);
 	
 	list <expression*> result;
@@ -30,7 +29,7 @@ expression* InferenceEngine::generateExpression(string sExpression)
 	argument* arg;
 	expression* result, *prevExpression;
 	stack <expression*> tree; //
-
+	int bracketCount = 0;
 	string name, character;
 	string::size_type i = 0;
 	character = sExpression[i];
@@ -59,6 +58,14 @@ expression* InferenceEngine::generateExpression(string sExpression)
 		}
 		else // If it doesnt match keep going
 		{
+			if (sExpression[i] == '(')
+			{
+				bracketCount++;
+			}
+			else if (sExpression[i] == ')')
+			{
+				bracketCount--;
+			}
 			i++;
 			character = sExpression[i];
 		}
@@ -76,18 +83,39 @@ expression* InferenceEngine::generateExpression(string sExpression)
 		{
 			if (tree.top()->isOperator())
 			{
-				// If the last one entered was an operator our current argument must be its child
-				result->setParent(tree.top());
+				if (tree.size() < 2 && bracketCount > 0)
+				{
+					tree.push(result);
+				}
+				else if (bracketCount > 0)
+				{
+					expression * temp = tree.top();
+					tree.pop();
+					result->parent = temp;
+					temp->right = result;
+					temp->parent = tree.top();
+					tree.top()->right = temp;
+					
+				}
+				else
+				{
+					if (!result->setParent(tree.top()))
+					{
+						tree.top()->setParent(result);
+						tree.pop();
+						tree.push(result);
+					}
+				}
 			}
 			else // Variables need to be made the children of an operator
 			{
-				result->left = tree.top(); // We know we can safely pop at least once due to first IF()
-				tree.pop();
+				tree.top()->setParent(result);
+				tree.pop(); // We know we can safely pop at least once due to first IF()
 
-				if (tree.size() > 0) // Prevent read access error
+				if (tree.size() > 0 && bracketCount < 1) // Prevent read access error
 				{
-					result->right = tree.top();
-					tree.pop();
+					tree.top()->setParent(result);
+					tree.pop(); // We know we can safely pop at least once due to first IF()
 				}
 
 				tree.push(result);
@@ -101,7 +129,6 @@ expression* InferenceEngine::generateExpression(string sExpression)
 
 	result = tree.top(); // Only root node remaining
 	tree.pop();
-	printTree(result);
 	return result;
 }
 
@@ -130,9 +157,13 @@ argument * InferenceEngine::newArg(string value)
 	{
 		if ((*i)->name == value)
 		{
-			
 			return *i; // If an argument already exists don't create a new one
 		}
+	}
+	
+	if (value[0] == '~') // Create a positive version just in case it doesnt exist
+	{
+		newArg(value.substr(1, value.length()));
 	}
 
 	argument* result = new argument(value, UNKNOWN);
@@ -164,15 +195,8 @@ void InferenceEngine::readInFile(string path)
 				{
 					if (regex_match(sExpression, rgxVariableChars)) // If the expression is a standalone variable
 					{
-						truthValue val = TRUE;
-						if (sExpression[0] == '~')
-						{
-							sExpression.erase(0, 1); // Remove the 'NOT' from the name
-							val = FALSE;
-						}
-
 						newArgument = newArg(sExpression);
-						newArgument->value = val; 
+						newArgument->value = TRUE;
 						sExpression = "";
 					}
 					else
@@ -235,14 +259,30 @@ expression * InferenceEngine::findWhereConsequent(expression* source, argument* 
 	expression* result = NULL;
 	if (source != NULL)
 	{
+		// If the target is on the left, we need to see if theres an antecedant further up
 		if (source->left != NULL && result == NULL)
 		{
+			if (source->left->getArg() == target)
+			{
+				// If the parent has no parent no antecedent is possible
+				if (source->parent != NULL)
+				{
+					// Check that the source is not the consequent of its parent
+					if (source != source->parent->left)
+					{
+						return source->left;
+					}
+				}
+			}
+
 			result = findWhereConsequent(source->left, target);
 		}
 
 		if (source->right != NULL && result == NULL)
 		{
-			if (source->right->arg == target)
+			// name is checked rather than wether they are the same object so that 
+			// if an argument is only given in negated form we can still evaluate its positive form
+			if (source->right->getArg()->name == target->name) 
 			{
 				return source->right;
 			}

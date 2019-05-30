@@ -14,8 +14,9 @@ public:
 	string name;
 	truthValue value;
 	bool isOperator();
-
+	bool isNegated();
 private:
 	regex rgxOperatorChars = regex("^[<>=&|]+$");
+	bool negated;
 };
 

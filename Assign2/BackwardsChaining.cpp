@@ -3,7 +3,7 @@
 
 BackwardsChaining::BackwardsChaining(string path): InferenceEngine(path)
 {
-
+	execute();
 }
 
 BackwardsChaining::~BackwardsChaining()
@@ -17,35 +17,55 @@ void BackwardsChaining::execute()
 	expression* antecedant;
 	for (auto i = goals.begin(); i != goals.end(); i++)
 	{
-		for (auto j = allExpressions.begin(); j != allExpressions.end(); j++)
-		{
-			antecedant = findWhereConsequent(*j, *i);
+		solve(*i);
+	}
 
-			if (antecedant != NULL)
-			{
-				toSolve.push_back(antecedant); 
-			}
+	for (auto i = goals.begin(); i != goals.end(); i++)
+	{
+		cout << (*i)->name;
+		switch ((*i)->value)
+		{
+		case 0:
+			cout << " FALSE, ";
+			break;
+		case 1:
+			cout << " TRUE, ";
+			break;
+		case 2:
+			cout << " UNKNOWN, ";
+			break;
+		}
+		cout << endl;
+	}
+
+	for (auto i = allArgs.begin(); i != allArgs.end(); i++)
+	{
+		if ((*i)->value == TRUE)
+		{
+			cout << (*i)->name;
+			cout << " TRUE, ";
+			cout << endl;
 		}
 	}
 	
 }
 
 
-bool BackwardsChaining::solve(argument* arg)
+truthValue BackwardsChaining::solve(argument* arg)
 {
 	// We can never find the value of an operator, attempting to would result in infinite recursion
 	if (arg->isOperator()) 
 	{
-		return false;
+		return FALSE;
 	}
 
 	switch (arg->value)
 	{
 	case truthValue::TRUE:
-		return true;
+		return TRUE;
 
 	case truthValue::FALSE:
-		return false;
+		return FALSE;
 
 	case truthValue::UNKNOWN:
 
@@ -60,42 +80,72 @@ bool BackwardsChaining::solve(argument* arg)
 			}
 		}
 
+		if (toSolve.size() == 0)
+		{
+			arg->value = FALSE;
+			return FALSE; // If no antecedants assume FALSE
+		}
+			
+
 		for (auto i = toSolve.begin(); i != toSolve.end(); i++)
 		{
-			// If the antecedent implies our argument it can tell us something about our args value
-			if ((*i)->parent->getName() == "=>" || (*i)->parent->getName() == "<=>")
+			if ((*i)->parent == NULL)
 			{
-				if (!(*i)->isOperator())
+				return FALSE; // Prevent a read access violation 
+			}
+
+			// Only implication can give us a truth value
+			if ((*i)->parent->getName() == "<=>" || (*i)->parent->getName() == "=>") 
+			{
+				// If we've been given a lhs arg, we need to solve arg->parent->parent->right
+				if ((*i) == (*i)->parent->left)
 				{
-					
-					if ((*i)->parent->left->arg->value != truthValue::UNKNOWN)
+					if (solve((*i)->parent->parent->left->arg) == TRUE)
 					{
-						(*i)->arg->value = (*i)->parent->arg->value;
-						
+						arg->value = TRUE;
+						return TRUE;
 					}
-					else
+				}
+				// Is our antecedant composed of another expression? solve that first
+				if ((*i)->parent->left->isOperator())
+				{
+					if ((*i)->parent->left->getName() == "&")
 					{
-						toSolve.push_back((*i)); // We need to return to this argument
-						    
+						// Both operands of the antecedant must return TRUE 
+						if ((solve(((*i)->parent->left->left->getArg())) == TRUE && solve(((*i)->parent->left->right->getArg()))) == TRUE)
+						{
+							arg->value = TRUE;
+							return TRUE;
+						}
 					}
-				 
+					else if ((*i)->parent->left->getName() == "||")
+					{
+						// Only one operand must return true
+						if ((solve(((*i)->parent->left->left->getArg())) == TRUE || solve(((*i)->parent->left->right->getArg()))) == TRUE)
+						{
+							arg->value = TRUE;
+							return TRUE;
+						}
+					}
+					if (solve((*i)->parent->left->right->getArg()) == TRUE)
+					{
+						arg->value = TRUE;
+						return TRUE;
+					}
 				}
 
-
-
-
+				if (solve(((*i)->parent->left->getArg())) == TRUE)
+				{
+				    arg->value = TRUE;
+				    return TRUE;
+				}
 			}
-			else
-			{
-				// If our argument isn't having its value implied then this expression
-				// cannot tell us anything about it's truth value
-				continue; // See if we can solve it in the next expression
-			}
+
 		}
-		return false; // if we havent found the value of our param by default return false
-		// end of case
+
+		return FALSE; // if we havent found the value of our param by default return false
 	}
-	return false;
+	return FALSE;
 }
 
 

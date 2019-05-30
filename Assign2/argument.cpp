@@ -6,6 +6,17 @@ argument::argument(string pName, truthValue pValue)
 {
 	name = pName;
 	value = pValue;
+
+	if (name[0] == '~')
+	{
+		negated = true;
+		name = name.substr(1, name.length() - 1);
+	}
+	else
+	{
+		negated = false;
+	}
+
 }
 
 
@@ -20,4 +31,14 @@ bool argument::isOperator()
 			return true;
 		}
 		return false;
+}
+
+bool argument::isNegated()
+{
+	if (negated)
+	{
+		return true;
+	}
+
+	return false;
 }

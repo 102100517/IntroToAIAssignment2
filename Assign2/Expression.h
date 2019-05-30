@@ -18,6 +18,9 @@ public:
 	bool setParent(expression* parentNode);
 	void setAsNegated();
 	bool isOperator();
+	bool antecedantIsOperator();
+	bool consequentIsOperator();
+	argument* getArg();
 	
 	argument * arg; // Each argument exists independant of any one expression
 	expression * left, *right, *parent;
