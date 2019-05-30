@@ -13,37 +13,27 @@ ForwardsChaining::~ForwardsChaining()
 void ForwardsChaining::execute()
 {
 	list <expression*> toSolve;
+	string result = "NO: ";
 	expression* antecedant;
 	for (auto i = allArgs.begin(); i != allArgs.end(); i++)
 	{
-		solve(*i);
+		if (solve(*i) == TRUE)
+		{
+			result = "YES: ";
+		}
 	}
 
-	for (auto i = goals.begin(); i != goals.end(); i++)
-	{
-		cout << (*i)->name;
-		switch ((*i)->value)
-		{
-		case 0:
-			cout << " FALSE, ";
-			break;
-		case 1:
-			cout << " TRUE, ";
-			break;
-		case 2:
-			cout << " UNKNOWN, ";
-			break;
-		}
-		cout << endl;
-	}
+	cout << result;
 
 	for (auto i = allArgs.begin(); i != allArgs.end(); i++)
 	{
 		if ((*i)->value == TRUE)
 		{
-			cout << (*i)->name;
-			cout << " TRUE, ";
-			cout << endl;
+			if ((*i)->isNegated())
+			{
+				cout << "~";
+			}
+			cout << (*i)->name << ",";
 		}
 	}
 }
