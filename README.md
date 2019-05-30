@@ -24,7 +24,10 @@ expression it is currently evaluating.
 These objects have some getter/setter methods, however these are mostly for convienience so that 
 expression->argument->name can instead be written as expression->getName()
 Most of the underlying variables are still publicly accessible.
+This implementation allows for compatibility with both generic & horn knowledge bases.
 
+### Test cases
+Both BC & FC were tested & successfully complete the test examples given.
 
 ### Algorithms Implemented
 
