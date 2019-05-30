@@ -5,7 +5,7 @@
 class BackwardsChaining : public InferenceEngine
 {
 private:
-	bool solve(string arg);
+	bool solve(argument* arg);
 public:
 	BackwardsChaining(string path);       // Constructor
 	~BackwardsChaining();

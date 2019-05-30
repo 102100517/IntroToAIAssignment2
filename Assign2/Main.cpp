@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 
-	BackwardsChaining* BC = new BackwardsChaining("test_HornKB.txt");
+	BackwardsChaining* BC = new BackwardsChaining("test_genericKB.txt");
 	
 	//       ERROR CHECKING
 	/*

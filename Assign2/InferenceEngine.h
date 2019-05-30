@@ -16,21 +16,18 @@ using namespace std;
 class InferenceEngine
 {
 private:
-	ifstream* textFile;
 	void readInFile(string path);
 	expression* generateExpression(string expression); // returns root node of expression
 	argument* newArg(string value);
 	void printTree(expression* exp);
 protected:
-	regex rgxOperatorChars = regex("^[<>=&~|]+$"); 
-	regex rgxVariableChars = regex("^~?([A-Za-z0-9])+$");
-
+	regex rgxOperatorChars = regex("^[<>=&|]+$");
+	regex rgxVariableChars = regex("^[~A-Za-z0-9]+$");
 	list <expression*> allExpressions;   // Expressions stored as pre-processed strings
 	list <argument*> allArgs;      // Contains a list of arguments known to be true
 	list <argument*> goals;        // Holds aguments to find the truth value of
 
-	expression* findInExpression(expression* source, argument* target);
-	bool isOperator(argument* arg);
+	expression* findWhereConsequent(expression* source, argument* target);
 public:
 	InferenceEngine(string path);
 	~InferenceEngine();

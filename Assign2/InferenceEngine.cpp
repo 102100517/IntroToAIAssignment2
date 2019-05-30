@@ -7,6 +7,14 @@ InferenceEngine::InferenceEngine(string path)
 //	textFile = &aFile;
 	readInFile(path);
 	
+	list <expression*> result;
+	
+	for (auto i = allExpressions.begin(); i != allExpressions.end(); i++)
+	{
+		result.push_back(findWhereConsequent(*i, *goals.begin()));
+	}
+	
+	cout << "";
 }
 
 InferenceEngine::~InferenceEngine()
@@ -39,7 +47,7 @@ expression* InferenceEngine::generateExpression(string sExpression)
 				character = sExpression[i];
 			}
 		}
-		else
+		else if (regex_match(character, rgxOperatorChars) && i < sExpression.length())
 		{
 			// Read in an operator until we reach a variable
 			while (regex_match(character, rgxOperatorChars) && i < sExpression.length())
@@ -49,15 +57,24 @@ expression* InferenceEngine::generateExpression(string sExpression)
 				character = sExpression[i];
 			}
 		}
-
+		else // If it doesnt match keep going
+		{
+			i++;
+			character = sExpression[i];
+		}
+		
+		if (name == "")
+		{
+			continue;
+		}
 		arg = newArg(name); // Create a new argument to point to
 		name = "";
-		result = new expression();
-		result->arg = arg;  
+		result = new expression(arg);
+		 
 		
 		if (tree.size() > 0) // prevent read access error
 		{
-			if (isOperator(tree.top()->arg))
+			if (tree.top()->isOperator())
 			{
 				// If the last one entered was an operator our current argument must be its child
 				result->setParent(tree.top());
@@ -97,7 +114,7 @@ void InferenceEngine::printTree(expression* exp)
 			printTree(&*exp->left);
 		}
 		
-		cout << exp->arg->name << " ";
+		cout << exp->getName() << " ";
 
 		if (exp->right != NULL)   // prevent read access violation on recursive call
 		{
@@ -113,18 +130,19 @@ argument * InferenceEngine::newArg(string value)
 	{
 		if ((*i)->name == value)
 		{
+			
 			return *i; // If an argument already exists don't create a new one
 		}
 	}
 
-	argument* result = new argument(value, UKNOWN);
+	argument* result = new argument(value, UNKNOWN);
 	allArgs.push_back(result); // Add the new argument to the list of existing ones
 	return result;
 }
 
-/*
-	Read in the file & push each expression into a list depending on whether we are in ASK or TELL
-*/
+
+//	Read in the file & push each expression into a list depending on whether we are in ASK or TELL
+
 void InferenceEngine::readInFile(string path)
 {
 	ifstream myFile;
@@ -212,21 +230,14 @@ void InferenceEngine::readInFile(string path)
 /*************************************************************************************************/
 /**********************             PROTECTED METHODS             ********************************/
 
-expression * InferenceEngine::findInExpression(expression* source, argument* target)
+expression * InferenceEngine::findWhereConsequent(expression* source, argument* target)
 {
 	expression* result = NULL;
 	if (source != NULL)
 	{
 		if (source->left != NULL && result == NULL)
 		{
-			if (source->left->arg == target)
-			{
-				return source->left;
-			}
-			else
-			{
-				result = findInExpression(source->left, target);
-			}
+			result = findWhereConsequent(source->left, target);
 		}
 
 		if (source->right != NULL && result == NULL)
@@ -237,22 +248,14 @@ expression * InferenceEngine::findInExpression(expression* source, argument* tar
 			}
 			else
 			{
-				result = findInExpression(source->right, target);
+				result = findWhereConsequent(source->right, target);
 			}
 		}
-
-		return result;
 	}
+	return result;
 }
 
-bool InferenceEngine::isOperator(argument* arg)
-{
-	if (regex_match(arg->name, rgxOperatorChars))
-	{
-		return true;
-	}
-	return false;
-}
+
 
 /*************************************************************************************************/
 /**********************               PUBLIC METHODS              ********************************/
