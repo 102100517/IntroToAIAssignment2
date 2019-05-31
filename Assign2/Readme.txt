@@ -50,6 +50,7 @@ artificial intelligence, helped solve issues with writting the algorithm.
 chaining in artificial intelligence, helped solve issues with writting the algorithm.
 - https://www.youtube.com/watch?v=tpDU9UXqsUo : explaination of propositional logic as that is how the truth tables,
 forwards and backwards chaining use.
+- We had many conversation with another gorup in order to talk about implementation and the like it was Ryan & Alex.
 
 ## Summary Report
 James has implemented the underlying Inference Engine and the Main scripts. Thomas implemented the Forward Chaining,
