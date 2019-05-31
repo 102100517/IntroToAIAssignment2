@@ -5,9 +5,11 @@ The is is the second group assignment for the unit CS30019: Introduction to Arti
 Thomas Wright - 101470604
 James Hassal - 102100517
 Team ID - COS30019_A02_T034
+Github - https://github.com/102100517/IntroToAIAssignment2
 
 
 ## Features & Bugs
+
 ### Data representation
 The expressions read in via the knowledge base are stored as a binary tree.
 In this manner the expresion (A & B) || C is represented as:
@@ -35,3 +37,12 @@ Both BC & FC were tested & successfully complete the test examples given.
 Currently this assignment has forwards chaining & backwards chaining implemented. 
 These both use the same underlying algorithm to infer the results, however they still operate as two 
 distinct algorithms as each searches a different side of the binary tree expressions.
+
+### Acknowledgements
+
+
+## Summary Report
+James has implemented the underlying Inference Engine and the Main scripts. Thomas implemented the Forward Chaining,
+backwards chaining and the truth table algorithms. Each of us has committed a lot to this assignment and worked closesly
+together. We planned before starting each algorithm by writing out the step by step way to implement and also a lot
+of google searching.
