@@ -7,11 +7,13 @@ The is is the second group assignment for the unit CS30019: Introduction to Arti
 - Team ID - COS30019_A02_T034
 - Github - https://github.com/102100517/IntroToAIAssignment2
 
-
-## Features & Bugs
+## Features
 - Forward Chaining
 - Backwards Chaining
 - Truth Table Checking
+
+### Bugs
+Current build doesn't produce any bugs with the datasets given.
 
 ## Data representation
 The expressions read in via the knowledge base are stored as a binary tree.
@@ -47,9 +49,13 @@ distinct algorithms as each searches a different side of the binary tree express
 ## Acknowledgements/Resources
 - https://en.wikipedia.org/wiki/Forward_chaining : for a basic outline of how at a technical level it works
 - https://en.wikipedia.org/wiki/Backward_chaining : for a basic outline of how at a technical level it works
-- https://www.youtube.com/watch?v=PBTSdx_C9WM : an indepth explainaton on how forward chaining is implemented with artificial intelligence, helped solve issues with writting the algorithm.
-- https://www.youtube.com/watch?v=W5O8QAWu-OM : the same guy as the previous link but with a video on backwards chaining in artificial intelligence, helped solve issues with writting the algorithm.
-- https://www.youtube.com/watch?v=tpDU9UXqsUo : explaination of propositional logic as that is how the truth tables, forwards and backwards chaining use.
+- https://www.youtube.com/watch?v=PBTSdx_C9WM : an indepth explainaton on how forward chaining is implemented with 
+artificial intelligence, helped solve issues with writting the algorithm.
+- https://www.youtube.com/watch?v=W5O8QAWu-OM : the same guy as the previous link but with a video on backwards 
+chaining in artificial intelligence, helped solve issues with writting the algorithm.
+- https://www.youtube.com/watch?v=tpDU9UXqsUo : explaination of propositional logic as that is how the truth tables,
+forwards and backwards chaining use.
+- We had many conversation with another gorup in order to talk about implementation and the like it was Ryan & Alex.
 
 ## Summary Report
 James has implemented the underlying Inference Engine and the Main scripts. Thomas implemented the Forward Chaining,
