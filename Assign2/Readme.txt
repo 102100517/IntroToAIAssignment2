@@ -7,7 +7,6 @@ The is is the second group assignment for the unit CS30019: Introduction to Arti
 - Team ID - COS30019_A02_T034
 - Github - https://github.com/102100517/IntroToAIAssignment2
 
-
 ## Features & Bugs
 - Forward Chaining
 - Backwards Chaining
@@ -31,6 +30,9 @@ These objects have some getter/setter methods, however these are mostly for conv
 expression->argument->name can instead be written as expression->getName()
 Most of the underlying variables are still publicly accessible.
 This implementation allows for compatibility with both generic & horn knowledge bases.
+
+## Missing
+- Truth Tables are not working 100% as we haven't been able to work out 
 
 ### Test cases
 Both BC & FC were tested & successfully complete the test examples given.

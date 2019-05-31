@@ -13,7 +13,7 @@ The is is the second group assignment for the unit CS30019: Introduction to Arti
 - Backwards Chaining
 - Truth Table Checking
 
-### Data representation
+## Data representation
 The expressions read in via the knowledge base are stored as a binary tree.
 In this manner the expresion (A & B) || C is represented as:
 		
@@ -32,16 +32,19 @@ expression->argument->name can instead be written as expression->getName()
 Most of the underlying variables are still publicly accessible.
 This implementation allows for compatibility with both generic & horn knowledge bases.
 
-### Test cases
+## Missing
+- Truth Tables are not working 100% as we haven't been able to work out 
+
+## Test cases
 Both BC & FC were tested & successfully complete the test examples given.
 
-### Algorithms Implemented
+## Algorithms Implemented
 
 Currently this assignment has forwards chaining & backwards chaining implemented. 
 These both use the same underlying algorithm to infer the results, however they still operate as two 
 distinct algorithms as each searches a different side of the binary tree expressions.
 
-### Acknowledgements/Resources
+## Acknowledgements/Resources
 - https://en.wikipedia.org/wiki/Forward_chaining : for a basic outline of how at a technical level it works
 - https://en.wikipedia.org/wiki/Backward_chaining : for a basic outline of how at a technical level it works
 - https://www.youtube.com/watch?v=PBTSdx_C9WM : an indepth explainaton on how forward chaining is implemented with artificial intelligence, helped solve issues with writting the algorithm.
