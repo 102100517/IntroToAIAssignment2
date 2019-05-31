@@ -20,8 +20,8 @@ In this manner the expresion (A & B) || C is represented as:
 		   ||
 		 /    \
 		&      C
-	   / \
-	   A B
+	      / \
+	      A B
 
 Each argument in the expression has a pointer to each of its children & its parent.
 Using these the algorithm is able to determine antecedants/consequents relative to the
