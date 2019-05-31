@@ -9,6 +9,9 @@ Github - https://github.com/102100517/IntroToAIAssignment2
 
 
 ## Features & Bugs
+- Forward Chaining
+- Backwards Chaining
+- Truth Table Checking
 
 ### Data representation
 The expressions read in via the knowledge base are stored as a binary tree.
@@ -38,11 +41,12 @@ Currently this assignment has forwards chaining & backwards chaining implemented
 These both use the same underlying algorithm to infer the results, however they still operate as two 
 distinct algorithms as each searches a different side of the binary tree expressions.
 
-### Acknowledgements
+### Acknowledgements/Resources
 
 
 ## Summary Report
 James has implemented the underlying Inference Engine and the Main scripts. Thomas implemented the Forward Chaining,
 backwards chaining and the truth table algorithms. Each of us has committed a lot to this assignment and worked closesly
 together. We planned before starting each algorithm by writing out the step by step way to implement and also a lot
-of google searching.
+of google searching. The current state is Thomas at 19 commits and 1600 lines of code and James at 14 commits with 700
+lines of code. 
